@@ -17,10 +17,12 @@ func main() {
     router.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
         http.ServeFile(w, r, "favicon.ico")
     })
+
     router.HandleFunc("/ws", webserver.WsHandler)
     router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
     server := webserver.InitServer("", "6565", 30*time.Second)
     server.Handler = router
+
     go func() {
         err := server.ListenAndServe()
         if err != nil {
